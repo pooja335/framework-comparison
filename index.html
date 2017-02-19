@@ -7,26 +7,22 @@
   </head>
   <body>
     <div class="container">
-      <div class="col-lg-12">
-        <table id="results" class="table">
-          <tr>
-            <th></th>
-            <th>Commits</th>
-            <th>Stars</th> 
-            <th>Issues</th>
-          </tr>
-          <!-- <tr>
-            <th>React</th>
-          </tr>
-          <tr>
-            <th>Angular</th>
-          </tr>
-          <tr>
-            <th>Ember</th>
-          </tr>
-          <tr>
-            <th>Vue</th>
-          </tr> -->
+      <div class="col-lg-2">
+        <h4>Filter Results</h4>
+        <h6 id="frameworks">Frameworks</h6>
+        <h6 id="metrics">Metrics</h6>
+
+      </div>
+      <div class="col-lg-10">
+        <table class="table">
+          <tbody id="results">
+            <tr>
+              <th></th>
+              <th id="commits">Commits in past year</th>
+              <th id="stars">Stars</th> 
+              <th id="issues">Issues</th>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
