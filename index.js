@@ -49,6 +49,7 @@ var fetchRepo = (repo) => {
       return totalCommits + week.total;
     }, 0)
     allInfo.data.push(currentRepoData);
+    allInfo.checked.push(currentRepoData.name)
   })
 }
 
@@ -56,7 +57,7 @@ var displayFilters = (allInfo) => {
   allInfo.data.forEach((framework) => {
     var checkboxDiv = document.createElement("div");
     checkboxDiv.className = "checkbox"
-    checkboxDiv.innerHTML = `<label><input type="checkbox" name="${framework.name}">${framework.name}</label>`                       
+    checkboxDiv.innerHTML = `<label><input type="checkbox" checked name="${framework.name}">${framework.name}</label>`                       
     document.getElementById("filter").appendChild(checkboxDiv);
   })
 }
@@ -71,10 +72,20 @@ var displayData = (allInfo) => {
 
   var headingTR = document.createElement("tr");
   headingTR.className = "heading-tr"
-  headingTR.innerHTML = '<th></th><th id="commits">Commits in past year</th><th id="stars">Stars</th><th id="issues">Issues</th>'
+  headingTR.innerHTML = '<th>Framework</th><th id="commits">Commits in Past Year</th><th id="stars">Stars</th><th id="issues">Open Issues</th>'
   resultTbody.appendChild(headingTR);
 
-  allInfo.data.forEach((framework) => {
+
+  var filteredSortedData = allInfo.data.filter((framework) => {
+    return (allInfo.checked.indexOf(framework.name) > -1)
+  })
+
+  filteredSortedData.sort((a, b) => {
+    return (b[allInfo.sortedBy] - a[allInfo.sortedBy])
+  })
+
+
+  filteredSortedData.forEach((framework) => {
     var tr = document.createElement("tr");
     tr.innerHTML = `<th>${framework.name}</th><td>${framework.commits}</td><td>${framework.stars}</td><td>${framework.issues}</td>`                       
     resultTbody.appendChild(tr);
@@ -82,13 +93,12 @@ var displayData = (allInfo) => {
 }
 
 var initialize = () => {
-  document.querySelectorAll(".heading-tr th").forEach((heading) => {
-    heading.onclick = (e) => {
+  document.getElementById("results").onclick = (e) => {
+    if (e.target.id === 'commits' || e.target.id === 'stars' || e.target.id === 'issues') {
       allInfo.sortedBy = e.target.id
-      console.log(allInfo)
       displayData(allInfo)
     }
-  })
+  }
 
   document.querySelectorAll(".checkbox input").forEach((checkboxInput) => {
     checkboxInput.onchange = (e) => {
