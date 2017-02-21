@@ -48,21 +48,11 @@ var fetchRepo = (repo) => {
     currentRepoData['commits'] = commitData.reduce((totalCommits, week) => {
       return totalCommits + week.total;
     }, 0)
-    allInfo.data.push(currentRepoData);
-    allInfo.checked.push(currentRepoData.name)
+    return currentRepoData;
   })
 }
 
-var displayFilters = (allInfo) => {
-  allInfo.data.forEach((framework) => {
-    var checkboxDiv = document.createElement("div");
-    checkboxDiv.className = "checkbox"
-    checkboxDiv.innerHTML = `<label><input type="checkbox" checked name="${framework.name}">${framework.name}</label>`                       
-    document.getElementById("filter").appendChild(checkboxDiv);
-  })
-}
-
-var displayData = (allInfo) => {
+var displayData = () => {
   var resultTbody = document.getElementById("results")
   var rows = document.getElementsByTagName("tr");
   
@@ -84,15 +74,27 @@ var displayData = (allInfo) => {
     return (b[allInfo.sortedBy] - a[allInfo.sortedBy])
   })
 
-
   filteredSortedData.forEach((framework) => {
     var tr = document.createElement("tr");
-    tr.innerHTML = `<th>${framework.name}</th><td>${framework.commits}</td><td>${framework.stars}</td><td>${framework.issues}</td>`                       
+    tr.innerHTML = `<th>${framework.name}</th><td style="background-color: findRGBvalue()">${framework.commits}</td><td>${framework.stars}</td><td>${framework.issues}</td>`                       
     resultTbody.appendChild(tr);
   })
 }
 
+var displayFilters = () => {
+  var frameworkNames = repos.map((repo) => (repo.split('/')[1]))
+  frameworkNames.forEach((name) => {
+    allInfo.checked.push(name)
+    var checkboxDiv = document.createElement("div");
+    checkboxDiv.className = "checkbox"
+    checkboxDiv.innerHTML = `<label><input type="checkbox" checked name="${name}">${name}</label>`                       
+    document.getElementById("filter").appendChild(checkboxDiv);
+  })
+}
+
 var initialize = () => {
+  displayFilters(allInfo)
+
   document.getElementById("results").onclick = (e) => {
     if (e.target.id === 'commits' || e.target.id === 'stars' || e.target.id === 'issues') {
       allInfo.sortedBy = e.target.id
@@ -115,11 +117,16 @@ var initialize = () => {
   })
 }
 
-Promise.all(repos.map(fetchRepo)).then(() => {
-  displayData(allInfo)
-  displayFilters(allInfo)
-  initialize()
-})
+var poll = () => {
+  Promise.all(repos.map(fetchRepo)).then((allRepoData) => {
+    allInfo.data = allRepoData;
+    displayData()
+    setTimeout(poll, 10000)
+  })
+}
+
+initialize()
+poll()
 
 
 
