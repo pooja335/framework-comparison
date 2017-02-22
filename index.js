@@ -11,6 +11,7 @@ var allInfo = {
   checked: [],
   sortedBy: ''
 }
+var refreshTimer = null;
 
 var fetchCommitActivity = (repo) => {
   return fetch(`https://api.github.com/repos/${repo}/stats/commit_activity?access_token=71e497341966b1d5e8f2651df3f475550baa7da5`, {
@@ -95,6 +96,11 @@ var displayData = () => {
   })
 }
 
+var displayRefreshTime = () => {
+  var refreshTimeText = document.getElementById('refresh-time')
+  refreshTimeText.innerHTML = (`<em>Last refresh time: ${(new Date(Date.now())).toLocaleTimeString()} <i class="fa fa-refresh"></i></em>`);
+}
+
 var displayFilters = () => {
   var frameworkNames = repos.map((repo) => (repo.split('/')[1]))
   frameworkNames.forEach((name) => {
@@ -128,13 +134,23 @@ var initialize = () => {
       displayData(allInfo)
     }
   })
+
+  document.getElementById('refresh-time').onclick = (e) => {
+    if (e.target.className === "fa fa-refresh") {
+      poll()
+    }
+  }
 }
 
 var poll = () => {
+  if (refreshTimer) {
+    clearTimeout(refreshTimer)
+  }
   Promise.all(repos.map(fetchRepo)).then((allRepoData) => {
     allInfo.data = allRepoData
     displayData()
-    setTimeout(poll, 10000)
+    displayRefreshTime()
+    refreshTimer = setTimeout(poll, 10000)
   })
 }
 
