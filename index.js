@@ -11,7 +11,7 @@ var allInfo = {
   checked: [],
   sortedBy: ''
 }
-var refreshTimer = null;
+var refreshTimer = null
 
 var fetchCommitActivity = (repo) => {
   return fetch(`https://api.github.com/repos/${repo}/stats/commit_activity?access_token=71e497341966b1d5e8f2651df3f475550baa7da5`, {
@@ -20,7 +20,6 @@ var fetchCommitActivity = (repo) => {
       Accept: 'application/vnd.github.v3+json'
     })
   }).then((response) => {
-    console.log(response.status)
     if (response.status === 200) {
       return response.json()
     } else if (response.status === 202) {
@@ -30,7 +29,7 @@ var fetchCommitActivity = (repo) => {
         return fetchCommitActivity(repo)
       })
     } else {
-      throw 'error'
+      throw new Error()
     }
   })
 }
@@ -43,11 +42,10 @@ var fetchRepo = (repo) => {
       Accept: 'application/vnd.github.v3+json'
     })
   }).then((response) => {
-    console.log(response.status)
     if (response.status === 200) {
       return response.json()
     } else {
-      throw 'error'
+      throw new Error()
     }
   }).then((repoData) => {
     currentRepoData = {
@@ -66,7 +64,7 @@ var fetchRepo = (repo) => {
 
 var addHeaderColumn = (headingTR, columnId) => {
   var headingTH = document.createElement('th')
-  headingTH.innerHTML = `<i id="${columnId}" class="fa ${(allInfo.sortedBy === columnId ? "fa-sort-desc" : "fa-sort")}"></i>&nbsp${columnTitles[columnId]}`
+  headingTH.innerHTML = `<i id="${columnId}" class="fa ${(allInfo.sortedBy === columnId ? 'fa-sort-desc' : 'fa-sort')}"></i>&nbsp${columnTitles[columnId]}`
   headingTR.appendChild(headingTH)
 }
 
@@ -103,7 +101,7 @@ var displayData = () => {
 
 var displayRefreshTime = () => {
   var refreshTimeText = document.getElementById('refresh-time')
-  refreshTimeText.innerHTML = (`<em>Last refresh time: ${(new Date(Date.now())).toLocaleTimeString()} <i class="fa fa-refresh"></i></em>`);
+  refreshTimeText.innerHTML = (`<em>Last refresh time: ${(new Date(Date.now())).toLocaleTimeString()} <i class="fa fa-refresh"></i></em>`)
 }
 
 var displayFilters = () => {
@@ -141,13 +139,13 @@ var initialize = () => {
   })
 
   document.getElementById('refresh-time').onclick = (e) => {
-    if (e.target.className === "fa fa-refresh") {
+    if (e.target.className === 'fa fa-refresh') {
       poll(true)
     }
   }
 }
 
-var poll = (manualRefresh=false) => {
+var poll = (manualRefresh = false) => {
   var errorAlert = document.getElementById('error-alert')
   if (refreshTimer) {
     clearTimeout(refreshTimer)

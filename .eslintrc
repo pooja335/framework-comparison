@@ -11,6 +11,7 @@
     "arrow-body-style": "off",
     "arrow-parens": "off",
     "vars-on-top": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-else-return": "off"
   }
 }
