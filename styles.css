@@ -24,3 +24,6 @@ table th,td {
   color: rgb(100, 100, 100)
 }
 
+.fa:hover {
+  cursor: pointer;
+}

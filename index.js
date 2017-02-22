@@ -29,6 +29,8 @@ var fetchCommitActivity = (repo) => {
       }).then(() => {
         return fetchCommitActivity(repo)
       })
+    } else {
+      throw 'error'
     }
   })
 }
@@ -41,8 +43,11 @@ var fetchRepo = (repo) => {
       Accept: 'application/vnd.github.v3+json'
     })
   }).then((response) => {
+    console.log(response.status)
     if (response.status === 200) {
       return response.json()
+    } else {
+      throw 'error'
     }
   }).then((repoData) => {
     currentRepoData = {
@@ -113,12 +118,12 @@ var displayFilters = () => {
 }
 
 var initialize = () => {
-  displayFilters(allInfo)
+  displayFilters()
 
   document.getElementById('results').onclick = (e) => {
     if (e.target.id === 'commits' || e.target.id === 'stars' || e.target.id === 'issues') {
       allInfo.sortedBy = e.target.id
-      displayData(allInfo)
+      displayData()
     }
   }
 
@@ -131,18 +136,19 @@ var initialize = () => {
       } else {
         allInfo.checked.splice(index, 1)
       }
-      displayData(allInfo)
+      displayData()
     }
   })
 
   document.getElementById('refresh-time').onclick = (e) => {
     if (e.target.className === "fa fa-refresh") {
-      poll()
+      poll(true)
     }
   }
 }
 
-var poll = () => {
+var poll = (manualRefresh=false) => {
+  var errorAlert = document.getElementById('error-alert')
   if (refreshTimer) {
     clearTimeout(refreshTimer)
   }
@@ -150,10 +156,16 @@ var poll = () => {
     allInfo.data = allRepoData
     displayData()
     displayRefreshTime()
+    errorAlert.classList.add('hidden')
     refreshTimer = setTimeout(poll, 10000)
+  }).catch(() => {
+    refreshTimer = setTimeout(poll, 10000)
+    if (manualRefresh) {
+      errorAlert.classList.remove('hidden')
+    }
   })
 }
 
 initialize()
-poll()
+poll(true)
 
