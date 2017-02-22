@@ -1,3 +1,18 @@
+h1 {
+  padding: 20px;
+  color: rgb(0, 139, 139);
+}
+
 table th,td {
   text-align: center;
 }
+
+.heading-tr th, .panel-default>.panel-heading {
+  color: white;
+  background-color: rgb(0, 139, 139);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd), .panel-body {
+  background-color: rgba(0, 139, 139, 0.1);
+}
+
