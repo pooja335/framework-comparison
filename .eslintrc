@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-var": 0,
+    "semi": ["error", "never"],
+    "strict": "off",
+    "comma-dangle": ["error", "never"],
+    "arrow-body-style": "off",
+    "arrow-parens": "off",
+    "vars-on-top": "off",
+    "no-param-reassign": "off"
+  }
+}
