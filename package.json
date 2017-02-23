@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint . --ignore-pattern bundle.js",
-    "browserify": "browserify index.js > bundle.js"
+    "lint": "eslint ./src",
+    "browserify": "browserify src/index.js > bundle.js"
   },
   "repository": {
     "type": "git",
