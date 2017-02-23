@@ -1,7 +1,10 @@
 'use strict'
 
+var { accessToken } = require('./constants.js')
+
+// fetch github activity for commits
 var fetchCommitActivity = (repo) => {
-  return fetch(`https://api.github.com/repos/${repo}/stats/commit_activity?access_token=71e497341966b1d5e8f2651df3f475550baa7da5`, {
+  return fetch(`https://api.github.com/repos/${repo}/stats/commit_activity?access_token=${accessToken}`, {
     method: 'GET',
     headers: new Headers({
       Accept: 'application/vnd.github.v3+json'
@@ -21,9 +24,10 @@ var fetchCommitActivity = (repo) => {
   })
 }
 
+// fetch github activity for issues and stars
 module.exports.fetchRepo = (repo) => {
   var currentRepoData = {}
-  return fetch(`https://api.github.com/repos/${repo}?access_token=71e497341966b1d5e8f2651df3f475550baa7da5`, {
+  return fetch(`https://api.github.com/repos/${repo}?access_token=${accessToken}`, {
     method: 'GET',
     headers: new Headers({
       Accept: 'application/vnd.github.v3+json'

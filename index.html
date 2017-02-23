@@ -15,16 +15,19 @@
           <div class="panel-heading">
             <h4 class="panel-title">Filter Results</h4>
           </div>
-          <div class="panel-body" id="filter">
-          </div>
+          <div class="panel-body" id="filter"></div>
         </div>
       </div>
       <div class="col-md-10">
         <table class="table table-bordered table-striped">
-          <tbody id="results">
-          </tbody>
+          <tbody id="results"></tbody>
         </table>
-        <p id="refresh-time" class="text-right"></p>
+        <p class="text-right refresh-time-text">
+          <em>Last refresh time:
+            <span id="refresh-time">00:00:00 am</span>
+            <i id="refresh-icon" class="fa fa-refresh"></i>
+          </em>
+        </p>
       </div>
     </div>
     <script src="bundle.js"></script>

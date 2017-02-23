@@ -7,7 +7,7 @@ h1 {
   margin-bottom: 0px;
 }
 
-table th,td {
+.table th,td {
   text-align: center;
 }
 
@@ -20,7 +20,7 @@ table th,td {
   background-color: rgba(0, 139, 139, 0.1);
 }
 
-#refresh-time {
+.refresh-time-text {
   color: rgb(100, 100, 100)
 }
 

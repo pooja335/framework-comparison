@@ -2,8 +2,8 @@
 
 var { displayData, displayRefreshTime, displayFilters } = require('./display.js')
 var { fetchRepo } = require('./fetchInfo.js')
+var { repos, pollingFrequency } = require('./constants.js')
 
-var repos = ['angular/angular.js', 'emberjs/ember.js', 'facebook/react', 'vuejs/vue']
 var allInfo = {
   data: [],
   checked: [],
@@ -11,25 +11,28 @@ var allInfo = {
 }
 var refreshTimer = null
 
+// fetches data periodically and redisplays data
 var poll = (manualRefresh = false) => {
   var errorAlert = document.getElementById('error-alert')
   if (refreshTimer) {
     clearTimeout(refreshTimer)
   }
+
   Promise.all(repos.map(fetchRepo)).then((allRepoData) => {
     allInfo.data = allRepoData
     displayData(allInfo)
     displayRefreshTime()
     errorAlert.classList.add('hidden')
-    refreshTimer = setTimeout(poll, 10000)
+    refreshTimer = setTimeout(poll, pollingFrequency)
   }).catch(() => {
-    refreshTimer = setTimeout(poll, 10000)
+    refreshTimer = setTimeout(poll, pollingFrequency)
     if (manualRefresh) {
       errorAlert.classList.remove('hidden')
     }
   })
 }
 
+// calls display functions initially and binds event handlers
 var initialize = () => {
   displayFilters(repos, allInfo)
 
@@ -53,13 +56,11 @@ var initialize = () => {
     }
   })
 
-  document.getElementById('refresh-time').onclick = (e) => {
-    if (e.target.id === 'refresh-icon') {
-      poll(true)
-    }
+  document.getElementById('refresh-icon').onclick = () => {
+    poll(true)
   }
+
+  poll(true)
 }
 
 initialize()
-poll(true)
-
